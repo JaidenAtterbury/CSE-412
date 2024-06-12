@@ -1,0 +1,63 @@
+---
+title: "CSE 412 A5"
+author: "Jaiden Atterbury"
+date: "2024-02-21"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+data <- read.csv("life-expectancy.csv")
+```
+
+```{r}
+data_new <- data %>% 
+            rename(`Life Expectancy (Years)`= Period.life.expectancy.at.birth...Sex..all...Age..0) %>%
+            filter(Year > 1949) %>% 
+            mutate(Entity = recode(Entity,
+                                   "Bolivia" = "Bolivia, Plurinational State of",
+                                   "Vietnam" = "Viet Nam",
+                                   "Venezuela" = "Venezuela, Bolivarian Republic of",
+                                   "British Virgin Islans" = "Virgin Islands, British",
+                                   "Brunei" = "Brunei Darussalam",
+                                   "Cote d'Ivoire" = "Côte d'Ivoire",
+                                   "Curacao" = "Curaçao",
+                                   "Czhechia" = "Czech Republic",
+                                   "Democratic Republic of Congo" = "Congo, the Democratic Republic of the",
+                                   "East Timor" = "Timor-Leste",
+                                   "Eswatini" = "Swaziland",
+                                   "Falkland Islands" = "Falkland Islands (Malvinas)",
+                                   "Iran" = "Iran, Islamic Republic of",
+                                   "Micronesia (country)" = "Micronesia, Federated States of" ,
+                                   "Moldova" = "Moldova, Republic of",
+                                   "North Korea" = "Korea, Democratic People's Republic of",
+                                   "North Macedonia" = "Macedonia, the former Yugoslav Republic of",
+                                   "Palestine" = "Palestine, State of",
+                                   "Russia" = "Russian Federation",
+                                   "Saint Barthelemy" = "Saint Barthélemy",
+                                   "Saint Helena" ="Saint Helena, Ascension and Tristan da Cunha",
+                                   "South Korea" = "Korea, Republic of",
+                                   "Syria" = "Syrian Arab Republic",
+                                   "Taiwan" = "Taiwan, Province of China",
+                                   "Tanzania" = "Tanzania, United Republic of",
+                                   "United States Virgin Islands" = "Virgin Islands, U.S."
+                                   ))
+            
+write.csv(data_new, "A5-Life-Expectancy-Cleaned.csv")
+```
+
+```{r}
+data_2021 <- data_new %>% filter(Year == 2021)
+
+write.csv(data_2021, "A5-Life-Expectancy-Cleaned-2021.csv")
+```
+
+```{r}
+data_avg <- data_new %>% group_by(Entity) %>% 
+            summarise(mean_life_expectancy = mean(`Life Expectancy (Years)`))
+
+write.csv(data_avg, "A5-Life-Expectancy-Cleaned-Avg.csv")
+```
+
+
